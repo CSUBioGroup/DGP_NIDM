@@ -1,42 +1,3 @@
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
-% clear all
-% %     dataname = 'Dataset_HumanPPI_MencheScience2015_OMIM_HPOSim_meshDis_SymptomSim_DisGene' ;
-% %PPItype   = 'SinglePPI'
-% PPItype    = 'multiplePPI'  
-% netname    = 'PPI';   
-% %DisSetName = 'Mesh';
-% % %  
-% 
-% load('updateID2019_newDataset_HumanPPI_DisGene_DisSim_AllData_noGTExCoExp_weight.mat');  % if nargin<1       
-% AdjGfGall = sparse( data_all.DataGeneNet_1Net.matrix  ); 
-% MatrixSet_gg = [];  
-% if strcmpi('SinglePPI', PPItype)  
-%     MatrixSet_gg.Science2015PPI = AdjGfGall;    
-% else
-%     MatrixSet_gg.matrix_binary    = data_all.DataSetPPI.matrix_binary;     
-%     MatrixSet_gg.matrix_complexes = data_all.DataSetPPI.matrix_complexes;     
-%     MatrixSet_gg.matrix_kinase    = data_all.DataSetPPI.matrix_kinase;     
-%     MatrixSet_gg.matrix_literature= data_all.DataSetPPI.matrix_literature;     
-%     MatrixSet_gg.matrix_metabolic = data_all.DataSetPPI.matrix_metabolic;     
-%     MatrixSet_gg.matrix_regulatory= data_all.DataSetPPI.matrix_regulatory;     
-%     MatrixSet_gg.matrix_signaling = data_all.DataSetPPI.matrix_signaling;            
-% end  
-% %  
-% %AdjGfD            = logical(data_all.DataDiseaseNet_MeSH70DiseaseGeneSet.Matrix_Disease_Gene)';  
-% Matrix_gene_dis    = logical(data_all.DataDiseaseNet_MeSH70DiseaseGeneSet.Matrix_Disease_Gene)';
-% % TableDiseases     = data_all.DataDiseaseNet_MeSH70DiseaseGeneSet.Table70MeshDiseases; 
-% clear('data_all') 
-% % %      
-% CoEXPname = ''
-% % CoEXPname  = 'CoEXP';  
-% if ~isempty( CoEXPname )
-%     dataCoEXP  = load('Net_GETxGeneCoExp2019filteredByHumanPPI_MencheScience2015.mat'); 
-%     MatrixSet_gg.(['CoExp'])                    = dataCoEXP.(['GeneCoExp_pearson',num2str(20)]);                     
-%     dataCoEXP =[];   
-% end 
-% save  data\demoDataset.mat 
-%         
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 datadir    = 'data';    
@@ -78,7 +39,7 @@ for  i_cv = 1:nCVTimes
     matAUPrec   = []; 
     matRec      = []; 
     matPrec     = [];    
-	methodset   = [] ;
+    methodset   = [] ;
     idx_res     = 0;     
     for ii_dis = 1:n_disease_in_Table
         tic
@@ -95,7 +56,7 @@ for  i_cv = 1:nCVTimes
             % idx_pos_train = idx_pos(ind_fold_pos~=i_fold);
             idx_pos_test    = idx_pos(ind_fold_pos==i_fold);  n_pos_test =length(idx_pos_test); 
             %   
-            idx_neg_test_X100_RC      = idx_neg(   randperm(n_neg,  min(n_pos_test*n_neighbors_artificial_linkage_interval,n_neg)  ) ); n_neg_test_x100 = length(  idx_neg_test_X100_RC  ) ; % 每个测试基因选择100个对应控制基因，总共n_pos_test*100
+            idx_neg_test_X100_RC      = idx_neg(   randperm(n_neg,  min(n_pos_test*n_neighbors_artificial_linkage_interval,n_neg)  ) ); n_neg_test_x100 = length(  idx_neg_test_X100_RC  ) ; % 姣忎釜娴嬭瘯鍩哄洜閫夋嫨100涓搴旀帶鍒跺熀鍥狅紝鎬诲叡n_pos_test*100
             idx_test_pos_neg_X100_RC  = [idx_neg_test_X100_RC; idx_pos_test ] ;   
             %
             idx_neg_test_WG        = idx_neg ;  n_neg_test_all = length(  idx_neg_test_WG  ) ;               
@@ -113,11 +74,7 @@ for  i_cv = 1:nCVTimes
             TableScores_NIDM.Properties.VariableNames =  strcat( TableScores_NIDM.Properties.VariableNames, [CoEXPname]  ); 
             TableScores = [TableScores,TableScores_NIDM];   
            
-            % 
-            [TableScores_RWRM ] = A_RWRMcp1(MatrixSet_gg_copy, P0, [],[], 'col') ; 
-            TableScores = [TableScores, TableScores_RWRM];   
-            [TableScores_RWRM ] = A_RWRMcp2(MatrixSet_gg_copy, P0, [],[], 'col') ; 
-            TableScores = [TableScores, TableScores_RWRM];   
+            %   
             
             % % % % % % % % % % % % % % % % % % % % %    
             methodset = TableScores.Properties.VariableNames ;   
@@ -143,10 +100,10 @@ for  i_cv = 1:nCVTimes
 	matAUPrec_nCVTimes{i_cv}  = mean(matAUPrec,1); 
 	matRec_nCVTimes{i_cv}     = mean(matRec,1); 
 	matPrec_nCVTimes{i_cv}    = mean(matPrec,1); 
-    methodset_nCVTimes{i_cv}  = methodset;    
+	methodset_nCVTimes{i_cv}  = methodset;    
 	toc 
-    disp('  ') 
-    mean(matAUPRC,1)
+        disp('  ') 
+        mean(matAUPRC,1)
     
 end 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %     
