@@ -1,53 +1,51 @@
-fdata = 'demoDataset.mat '
-if ~exist( fdata,'file')
-    clear all
-    %     dataname = 'Dataset_HumanPPI_MencheScience2015_OMIM_HPOSim_meshDis_SymptomSim_DisGene' ;
-    %PPItype   = 'SinglePPI'
-    PPItype    = 'multiple' 
-    fdatestrForfile = datestr(now,'yyyy.mmm.dd-HH.MM.SS')  
-    netname    = 'PPI';   
-    DisSetName = 'Mesh';
-    % %  
-
-    load('updateID2019_newDataset_HumanPPI_DisGene_DisSim_AllData_noGTExCoExp_weight.mat');  % if nargin<1     
-    if strcmpi(netname,'PPI') 
-        AdjGfG00 = sparse( data_all.DataGeneNet_1Net.matrix  ); 
-        MatrixSet_gg = [];  
-        if strcmpi('SinglePPI', PPItype)  
-            MatrixSet_gg.Science2015PPI = AdjGfG00;    
-        else
-            MatrixSet_gg.matrix_binary    = data_all.DataSetPPI.matrix_binary;     
-            MatrixSet_gg.matrix_complexes = data_all.DataSetPPI.matrix_complexes;     
-            MatrixSet_gg.matrix_kinase    = data_all.DataSetPPI.matrix_kinase;     
-            MatrixSet_gg.matrix_literature= data_all.DataSetPPI.matrix_literature;     
-            MatrixSet_gg.matrix_metabolic = data_all.DataSetPPI.matrix_metabolic;     
-            MatrixSet_gg.matrix_regulatory= data_all.DataSetPPI.matrix_regulatory;     
-            MatrixSet_gg.matrix_signaling = data_all.DataSetPPI.matrix_signaling;            
-        end 
-    end
-    %  
-    AdjGfD            = logical(data_all.DataDiseaseNet_MeSH70DiseaseGeneSet.Matrix_Disease_Gene)';  
-    Matrix_gene_dis00 = logical(data_all.DataDiseaseNet_MeSH70DiseaseGeneSet.Matrix_Disease_Gene)';
-    % TableDiseases     = data_all.DataDiseaseNet_MeSH70DiseaseGeneSet.Table70MeshDiseases; 
-    data_all       = [] 
-    % %      
-    CoEXPname = ''
-    % CoEXPname  = 'CoEXP';  
-    if ~isempty( CoEXPname )
-        dataCoEXP  = load('Net_GETxGeneCoExp2019filteredByHumanPPI_MencheScience2015.mat'); 
-        MatrixSet_gg.(['CoExp'])                    = dataCoEXP.(['GeneCoExp_pearson',num2str(20)]);                     
-        dataCoEXP =[];   
-    end 
-    save  data\demoDataset.mat 
-       
-end 
-% % % %
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% clear all
+% %     dataname = 'Dataset_HumanPPI_MencheScience2015_OMIM_HPOSim_meshDis_SymptomSim_DisGene' ;
+% %PPItype   = 'SinglePPI'
+% PPItype    = 'multiplePPI'  
+% netname    = 'PPI';   
+% %DisSetName = 'Mesh';
+% % %  
+% 
+% load('updateID2019_newDataset_HumanPPI_DisGene_DisSim_AllData_noGTExCoExp_weight.mat');  % if nargin<1       
+% AdjGfGall = sparse( data_all.DataGeneNet_1Net.matrix  ); 
+% MatrixSet_gg = [];  
+% if strcmpi('SinglePPI', PPItype)  
+%     MatrixSet_gg.Science2015PPI = AdjGfGall;    
+% else
+%     MatrixSet_gg.matrix_binary    = data_all.DataSetPPI.matrix_binary;     
+%     MatrixSet_gg.matrix_complexes = data_all.DataSetPPI.matrix_complexes;     
+%     MatrixSet_gg.matrix_kinase    = data_all.DataSetPPI.matrix_kinase;     
+%     MatrixSet_gg.matrix_literature= data_all.DataSetPPI.matrix_literature;     
+%     MatrixSet_gg.matrix_metabolic = data_all.DataSetPPI.matrix_metabolic;     
+%     MatrixSet_gg.matrix_regulatory= data_all.DataSetPPI.matrix_regulatory;     
+%     MatrixSet_gg.matrix_signaling = data_all.DataSetPPI.matrix_signaling;            
+% end  
+% %  
+% %AdjGfD            = logical(data_all.DataDiseaseNet_MeSH70DiseaseGeneSet.Matrix_Disease_Gene)';  
+% Matrix_gene_dis    = logical(data_all.DataDiseaseNet_MeSH70DiseaseGeneSet.Matrix_Disease_Gene)';
+% % TableDiseases     = data_all.DataDiseaseNet_MeSH70DiseaseGeneSet.Table70MeshDiseases; 
+% clear('data_all') 
+% % %      
+% CoEXPname = ''
+% % CoEXPname  = 'CoEXP';  
+% if ~isempty( CoEXPname )
+%     dataCoEXP  = load('Net_GETxGeneCoExp2019filteredByHumanPPI_MencheScience2015.mat'); 
+%     MatrixSet_gg.(['CoExp'])                    = dataCoEXP.(['GeneCoExp_pearson',num2str(20)]);                     
+%     dataCoEXP =[];   
+% end 
+% save  data\demoDataset.mat 
+%         
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 datadir    = 'data';    
 ResPerfDir = 'results'; if ~exist(ResPerfDir,'dir');mkdir(ResPerfDir); end
 load([datadir,filesep,'demoDataset.mat'])
- 
+CoEXPname = '';  
 SubNetworkNames =  fieldnames(MatrixSet_gg )';  
-disp(['Net:',netname,'      DisSet:',DisSetName,'   CoEXPname:',CoEXPname,'      Date:',fdatestrForfile]);
+fdatestr   = datestr(now,'yyyy.mmm.dd-HH.MM.SS') ;  
+disp(['Net:',netname,     'Date:',fdatestr]);
 disp( SubNetworkNames'  ) 
 
 
@@ -55,7 +53,7 @@ disp( SubNetworkNames'  )
 rng(1111)    
 nCVTimes  = 5;  nFold  = 5;  CVtype = [num2str(nFold),'FCV'];  MinSizeDisGeSet = nFold;     
 %
-n_disgenes_eachdisease = sum(Matrix_gene_dis00,1)';    
+n_disgenes_eachdisease = sum(Matrix_gene_dis,1)';    
 dis_IDset = find(n_disgenes_eachdisease>=MinSizeDisGeSet); 
 % dis_IDset = dis_IDset(1:2)   %%%for test only %%%%%%%%%%%    
 n_neighbors_artificial_linkage_interval = 99; 
@@ -84,7 +82,7 @@ for  i_cv = 1:nCVTimes
     idx_res     = 0;     
     for ii_dis = 1:n_disease_in_Table
         tic
-        Matrix_gene_dis_copy = Matrix_gene_dis00 ;  
+        Matrix_gene_dis_copy = Matrix_gene_dis ;  
         ID_dis               = dis_IDset(ii_dis);  
         disp(['i_cv-',num2str(i_cv),'; ii_dis-',num2str(ii_dis),'; ID_dis-',num2str(ID_dis)]) 
         ac_gene_dis00 = Matrix_gene_dis_copy(:,ID_dis ); 
@@ -172,7 +170,7 @@ tbRESmean         = array2table(matRESmean, 'VariableNames', vars, 'RowNames',{'
 %  save  
 date_cmplt  = datestr(now,'yyyy.mmm.dd-HH.MM.SS');
 parastr     = sprintf('CVtype=%s_CVtime=%d_MSDGS%d', CVtype  ,  nCVTimes, MinSizeDisGeSet );   
-outfile     = [ResPerfDir,filesep,'ResPerf_NIDM_',netname,'_',DisSetName,'_',parastr,'_',date_cmplt,'.mat'] 
+outfile     = [ResPerfDir,filesep,'ResPerf_NIDM_',PPItype,'_',parastr,'_',date_cmplt,'.mat'] 
 save([outfile],  'tbRESmean',  'date_start',  'date_cmplt' ,  '-v7.3' )   ;   
  
 
