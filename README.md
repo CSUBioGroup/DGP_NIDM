@@ -7,23 +7,23 @@ Matlab 2016 or above.
 
 
 ## Codes 
-#runCV_NIDM.m: cross-validation code.  <br>
+runCV_NIDM.m: cross-validation code.  <br>
 This code allows parallel execution. You can change "parfor" to "for" to cancel parallel execution  <br>
 
 
-#A_NIDMgss_v2.m: an updated version of NIDM, which can automatically make use of gSemSim when AdjGfD and/or AdjDfD are given. <br>   
+A_NIDMgss_v2.m: an updated version of NIDM, which can automatically make use of gSemSim when AdjGfD and/or AdjDfD are given. <br>   
 [TableScores ] = A_NIDMgss_v2(AdjSet, AdjGfD, AdjDfD, P0, MDL)  <br>
 % Input:  <br>
-% AdjSet: set of gene-gene matrices <br>  
+% AdjSet: set of gene-gene matrices <br>
 % AdjGfD: a gene-disease associatin matrix <br>
 % AdjDfD: a disease-disease associatin matrix <br>
 % P0: a vector marking excitation nodes of signals  <br>
 % MDL: M (default), C, R or L <br>
 % Ouput: <br>
-% TableScores: a table whos variable record the scores of genes.  <br> 
- 
-  
-#A_NIDM.m: a version of NIDM in the study. <br>   
+% TableScores: a table whos variable record the scores of genes.  <br>
+
+
+A_NIDM.m: a version of NIDM in the study. <br>   
 [TableScores ] = A_NIDM(AdjSet, P0, MDL )<br>
 % Input:  <br>
 % AdjSet: set of gene-gene matrices <br> 
