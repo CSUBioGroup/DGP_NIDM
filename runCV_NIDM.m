@@ -3,6 +3,7 @@
 datadir    = 'data';    
 ResPerfDir = 'results'; if ~exist(ResPerfDir,'dir');mkdir(ResPerfDir); end
 load([datadir,filesep,'demoDataset.mat'])
+AdjDfD     = speye( size(AdjGfD,2) ); 
 CoEXPname = '';  
 SubNetworkNames =  fieldnames(MatrixSet_gg )';  
 fdatestr   = datestr(now,'yyyy.mmm.dd-HH.MM.SS') ;  
@@ -74,9 +75,18 @@ for  i_cv = 1:nCVTimes
             TableScores_NIDM.Properties.VariableNames =  strcat( TableScores_NIDM.Properties.VariableNames, [CoEXPname]  ); 
             TableScores = [TableScores,TableScores_NIDM];   
            
-            %   
+	    % A_NIDMgss_v2 is preferred 
+            % no gSemSim  
+            [TableScores_NIDM ] = A_NIDMgss_v2(MatrixSet_gg_copy,[],[],  P0, [], [] ); 
+            TableScores_NIDM.Properties.VariableNames =  strcat( TableScores_NIDM.Properties.VariableNames, [CoEXPname]  ); 
+            TableScores = [TableScores,TableScores_NIDM];    
             
+            % +gss 
+            [TableScores_NIDM ] = A_NIDMgss_v2(MatrixSet_gg_copy,AdjGfD,AdjDfD,  P0, [], [] ); 
+            TableScores_NIDM.Properties.VariableNames =  strcat( TableScores_NIDM.Properties.VariableNames, [CoEXPname]  ); 
+            TableScores = [TableScores,TableScores_NIDM];               
             % % % % % % % % % % % % % % % % % % % % %    
+	    
             methodset = TableScores.Properties.VariableNames ;   
             test_real = ac_gene_dis00(idx_test_pos_neg_WG);  
             [AUROCset, AUPRCset , Rec5set  , Prec5set, AURecallset, AUPrecset   ] = getPerf(test_real,TableScores(idx_test_pos_neg_WG,:) ) ; 
